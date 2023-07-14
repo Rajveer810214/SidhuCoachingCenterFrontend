@@ -12,13 +12,13 @@ function Profile() {
   const [loading, setLoading] = useState(true); // New loading state
   useEffect(() => {
     if (localStorage.getItem('auth-token') === null) {
-      router.push('/Register');
+      router.push('/login');
     }
   }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/getUser', {
+        const response = await fetch('https://sidhu-coaching-center.onrender.com/api/auth/getUser', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('auth-token') },
         });

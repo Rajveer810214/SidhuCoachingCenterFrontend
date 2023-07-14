@@ -1,33 +1,44 @@
 {
-    "env": {
-      "browser": true,
-      "es2021": true
-    },
-    "extends": "airbnb",
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "rules": {
-      "react/forbid-prop-types": [
-        "error",
-        {
-          "forbid": ["any", "array"] // Specify the PropTypes to disallow
-        }
-      ],
-      "react/jsx-props-no-spreading": "off",
-      "jsx-a11y/label-has-associated-control": [ 2, {
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  
+  "extends": ["airbnb"],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "react/forbid-prop-types": [
+      "error",
+      {
+        "forbid": ["any", "array"]
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
         "labelComponents": ["CustomInputLabel"],
         "labelAttributes": ["label"],
         "controlComponents": ["CustomInput"],
         "depth": 3
-      }]  
-      , "import/no-extraneous-dependencies": ["error", {
-        "devDependencies": false,
-        "optionalDependencies": false,
-        "peerDependencies": false
-      }]
       }
-    }
-  
-  
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.test.js", "**/*.spec.js"]
+      }
+    ],
+    "react/no-unknown-property": ["error", { "ignore": ["jsx"] }]
+  }
+}

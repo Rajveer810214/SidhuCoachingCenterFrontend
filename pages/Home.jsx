@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import styles from '../styles/page.module.css';
+import { ToastContainer, toast } from 'react-toastify';
+import Footer from './footer';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
+  const [loading, setLoading] = useState(false); // Add loading state
+
   const [askquery, setAskQuery] = useState('');
   const handleAskQuery = (e) => {
     setAskQuery(e.target.value);
@@ -18,17 +22,24 @@ function Home() {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:3000/api/addquery', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('auth-token') },
-      body: JSON.stringify({ askquery }),
-    });
-    await response.json();
-    window.alert('Your query is send successfully');
-    setAskQuery('');
+    if (askquery.length < 20) {
+      toast('Minimum length is 20 characters');
+    } else {
+      setLoading(true);
+      const response = await fetch('https://sidhu-coaching-center.onrender.com/api/query/addqueries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'auth-token': localStorage.getItem('auth-token') },
+        body: JSON.stringify({ askquery }),
+      });
+      await response.json();
+      if (response.ok) {
+        setLoading(false);
+        toast('Successfully sent query'); setAskQuery('');
+      }
+    }
   };
   return (
-    <div className="container" style={{ marginTop: '16px' }}>
+    <div className="container" style={{ marginTop: '96px' }}>
       <style jsx>
         {`
         .accordion-item {
@@ -43,65 +54,70 @@ function Home() {
       {!query
         ? (
           <div className="alert alert-danger" role="alert">
-            Register your account For asking question
+            Verify your account For asking question
+            <Link href="/login">   Login your Account</Link>
           </div>
         )
         : (
           <form onSubmit={handleSubmit}>
+            <ToastContainer />
             <div className="input-group">
               <span className="input-group-text">Ask your query</span>
-              <textarea className="form-control" value={askquery} onChange={handleAskQuery} aria-label="With textarea" />
+              <textarea className="form-control" value={askquery} onChange={handleAskQuery} minLength={20} required aria-label="With textarea" />
             </div>
-            <button type="submit" className="btn btn-dark d-flex float-end my-2">Submit</button>
+            <button type="submit" className="btn btn-dark d-flex float-end my-2" disabled={loading}>{loading ? 'submitting...' : 'submit'}</button>
           </form>
         ) }
-
-      <div className="accordion" id="accordionExample" style={{ marginTop: '82px' }}>
-        <h1 className={styles.homeh1}>Choose your Standard</h1>
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              Class 10th
-            </button>
-          </h2>
-          <div id="collapseOne" className="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-            <div className="accordion-body">
-              {' '}
-              <Link href="./components/class10"> Go to Class 10th</Link>
-              {' '}
-
+      <section className="text-gray-600 body-font">
+        <div className="container px-5 py-24 mx-auto">
+          <h2 style={{ textAlign: 'center' }}>Choose your Standard</h2>
+          <div className="flex flex-wrap -m-4">
+            <div className="p-4 lg:w-1/3">
+              <div className="h-full bg-gray-100 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative">
+                <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">Student</h2>
+                <h1 className="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Class 10th</h1>
+                <p className="leading-relaxed mb-3">Success is not final; failure is not fatal: It is the courage to continue that counts.</p>
+                <Link href="components/class10" className="text-indigo-500 inline-flex items-center">
+                  Go to Class 10th
+                  <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+            <div className="p-4 lg:w-1/3">
+              <div className="h-full bg-gray-100 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative">
+                <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">Student</h2>
+                <h1 className="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Class +1</h1>
+                <p className="leading-relaxed mb-3">It is better to fail in originality than to succeed in imitation.</p>
+                <Link href="components/class11" className="text-indigo-500 inline-flex items-center">
+                  Go the Class +1
+                  <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+            <div className="p-4 lg:w-1/3">
+              <div className="h-full bg-gray-100 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative">
+                <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1">Student</h2>
+                <h1 className="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3">Class +2</h1>
+                <p className="leading-relaxed mb-3">It is not whether you get knocked down, it is whether you get up</p>
+                <Link href="components/class12" className="text-indigo-500 inline-flex items-center">
+                  Go the class +2
+                  <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" />
+                    <path d="M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              Class +1
-            </button>
-          </h2>
-          <div id="collapseTwo" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div className="accordion-body">
-              {' '}
-              <Link href="./components/class11"> Go to Class +1</Link>
-            </div>
-          </div>
-        </div>
-        <div className="accordion-item">
-          <h2 className="accordion-header">
-            <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              Class +2
-            </button>
-          </h2>
-          <div id="collapseThree" className="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div className="accordion-body">
-              {' '}
-              <Link href="./components/class12">Go to Class +2</Link>
-
-              {' '}
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
+      <Footer />
     </div>
   );
 }

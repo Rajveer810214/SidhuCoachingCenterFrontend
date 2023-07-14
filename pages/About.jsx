@@ -2,7 +2,10 @@ import React from 'react';
 
 export default function About() {
   return (
-    <div style={{ marginTop: '99px' }}>
+    <div style={{
+      marginTop: '111px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}
+    >
       Welcome to Sidhu Coaching Center! 🎉📚🧮
       Here, Maninder Pal Singh 🎓 provides expert guidance in mathematics for students
       of class 10th, +1, and +2.
